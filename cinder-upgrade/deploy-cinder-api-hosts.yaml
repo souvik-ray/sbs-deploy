@@ -18,6 +18,7 @@
         - cinder-backup
         - cinder-ec2-api
         - cinder-volume
+        - oslo-messaging-zmq-receiver
     - name: Start Services cinder
       service: name={{item}} state=started
       become: yes
@@ -25,4 +26,5 @@
         - cinder-api
         - cinder-scheduler
         - cinder-ec2-api
+        - oslo-messaging-zmq-receiver
   serial: 1

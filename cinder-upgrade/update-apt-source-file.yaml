@@ -1,4 +1,5 @@
 - hosts: hostList
+  serial: 1
   vars_files:
     - vars/cinder_info.yml
   tasks:

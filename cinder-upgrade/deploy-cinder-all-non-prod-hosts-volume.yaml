@@ -6,5 +6,5 @@
     - name: Start Services cinder volume
       service: name=cinder-volume state=started
       become: yes
-      run_once: yes
+      run_once: yes # This ensures only the volume service in the first host in the hostList is started
 

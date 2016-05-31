@@ -16,7 +16,11 @@
         - cinder-scheduler
         - cinder-backup
         - cinder-volume
+        - oslo-messaging-zmq-receiver
     - name: Start Services cinder volume
       service: name=cinder-volume state=started
       run_once: true
+      become: yes
+    - name: Start Oslo Messaging
+      service: name=oslo-messaging-zmq-receiver state=started
       become: yes

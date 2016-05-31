@@ -8,18 +8,8 @@
       shell: sudo apt-get update
     - name: install all cinder packages
       shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
-# -----------------------------------------------------------------------
-#    This will be used for normal deployment
-#    - name: Install cinder ec2
-#      shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
-# -----------------------------------------------------------------------
-#    - name: Fetch ec2-api
-#      get_url: url=http://10.140.221.229/snapshots/214/10.140.221.229/apt/jcssbs/jcssbs/pool/main/c/cinder-ec2-api/python-cinder-ec2-api_1.0.1.dev112+1_amd64.deb dest=/home/ubuntu mode=0666 use_proxy=no
-#      become: yes
-# -----------------------------------------------------------------------
-    - name: Dpkg ec2api
-      shell: sudo dpkg -i /tmp/python-cinder-ec2-api_1.0.1.dev112+1_amd64.deb
-      become: yes
+     name: Install cinder ec2
+      shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
     - name: Stop Services cinder
       service: name={{item}} state=stopped
       become: yes
@@ -38,3 +28,4 @@
         - cinder-scheduler
         - cinder-ec2-api
         - cinder-backup
+        - oslo-messaging-zmq-receiver

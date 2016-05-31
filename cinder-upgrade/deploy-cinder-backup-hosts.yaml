@@ -17,6 +17,10 @@
         - cinder-backup
         - cinder-ec2-api
         - cinder-volume
+        - oslo-messaging-zmq-receiver
     - name: Start Services cinder backup
-      service: name=cinder-backup state=started
+      service: name={{item}} state=started
       become: yes
+      with_items:
+          - cinder-backup
+          - oslo-messaging-zmq-receiver
