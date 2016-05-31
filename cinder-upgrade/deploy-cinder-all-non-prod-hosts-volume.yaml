@@ -1,0 +1,10 @@
+---
+- hosts: hostList
+  vars_files: 
+     - vars/cinder_info.yml
+  tasks:
+    - name: Start Services cinder volume
+      service: name=cinder-volume state=started
+      become: yes
+      run_once: yes
+

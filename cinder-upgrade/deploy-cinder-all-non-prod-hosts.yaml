@@ -1,14 +1,25 @@
+---
 - hosts: hostList
+  serial: 1  # This ensures that the services are deployed in only one host at a time
   vars_files:
     - vars/cinder_info.yml
-    - vars/proxy_info.yml
   tasks:
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-cinderclient python-keystoneclient python-glanceclient python-metrics python-novaclient python-openstackclient
-    - name: Install cinder ec2
-      shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
+# -----------------------------------------------------------------------
+#    This will be used for normal deployment
+#    - name: Install cinder ec2
+#      shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
+# -----------------------------------------------------------------------
+#    - name: Fetch ec2-api
+#      get_url: url=http://10.140.221.229/snapshots/214/10.140.221.229/apt/jcssbs/jcssbs/pool/main/c/cinder-ec2-api/python-cinder-ec2-api_1.0.1.dev112+1_amd64.deb dest=/home/ubuntu mode=0666 use_proxy=no
+#      become: yes
+# -----------------------------------------------------------------------
+    - name: Dpkg ec2api
+      shell: sudo dpkg -i /tmp/python-cinder-ec2-api_1.0.1.dev112+1_amd64.deb
+      become: yes
     - name: Stop Services cinder
       service: name={{item}} state=stopped
       become: yes
@@ -18,7 +29,8 @@
         - cinder-backup
         - cinder-ec2-api
         - cinder-volume
-    - name: Start Services cinder
+        - oslo-messaging-zmq-receiver
+    - name: Start Services cinder api, scheduler, ec2-api, backup
       service: name={{item}} state=started
       become: yes
       with_items:
@@ -26,8 +38,3 @@
         - cinder-scheduler
         - cinder-ec2-api
         - cinder-backup
-    - name: Start Services cinder
-      service: name=cinder-volume state=started
-      become: yes
-      run_once: yes
-  serial: 1
