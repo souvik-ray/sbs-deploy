@@ -6,7 +6,7 @@
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-cinderclient python-keystoneclient python-glanceclient python-metrics python-novaclient python-openstackclient
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
     - name: Install cinder ec2
       shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
     - name: Stop Services cinder

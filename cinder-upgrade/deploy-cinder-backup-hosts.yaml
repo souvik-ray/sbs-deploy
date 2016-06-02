@@ -7,7 +7,7 @@
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-cinderclient python-keystoneclient python-glanceclient python-metrics python-novaclient python-openstackclient
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
     - name: Stop Services cinder
       service: name={{item}} state=stopped
       become: yes
@@ -15,7 +15,6 @@
         - cinder-api
         - cinder-scheduler
         - cinder-backup
-        - cinder-ec2-api
         - cinder-volume
         - oslo-messaging-zmq-receiver
     - name: Start Services cinder backup
