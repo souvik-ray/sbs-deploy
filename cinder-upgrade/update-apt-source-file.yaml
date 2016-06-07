@@ -3,12 +3,9 @@
   vars_files:
     - vars/cinder_info.yml
   tasks:
-    - name: Remove old cinder packages path
-      lineinfile: dest=/etc/apt/sources.list line="{{cinder_old_repo_path}}" state=absent
-      become: yes
-    - name: Remove old cinder packages path
-      lineinfile: dest=/etc/apt/sources.list line="# {{cinder_old_repo_path}}"
-      become: yes
     - name: Add cinder packages path
-      lineinfile: dest=/etc/apt/sources.list line="{{cinder_repo_path}}"
+      lineinfile: dest=/etc/apt/sources.list regexp='^deb.*10.140.221.229\/snapshots.*' line="{{cinder_repo_path}}" backup=yes
+      become: yes
+    - name: Update rados_connect_timeout in cinder.conf
+      lineinfile: dest=/etc/cinder/cinder.conf regexp='^rados_connect_timeout' line='rados_connect_timeout=300'
       become: yes

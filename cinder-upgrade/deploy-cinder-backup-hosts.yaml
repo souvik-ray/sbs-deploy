@@ -1,13 +1,10 @@
-- hosts: hostList
+- hosts: backupList
   serial: 1
-  vars_files:
-    - vars/cinder_info.yml
-    - vars/proxy_info.yml
   tasks:
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics python-keystoneclient python-cinderclient python-oslo-middleware
     - name: Stop Services cinder
       service: name={{item}} state=stopped
       become: yes

@@ -1,12 +1,9 @@
-- hosts: hostList
-  vars_files:
-    - vars/cinder_info.yml
-    - vars/proxy_info.yml
+- hosts: apiList
   tasks:
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics python-keystoneclient python-cinderclient python-oslo-middleware
     - name: Install cinder ec2
       shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
     - name: Stop Services cinder
