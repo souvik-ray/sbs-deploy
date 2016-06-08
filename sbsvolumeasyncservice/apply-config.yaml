@@ -1,0 +1,15 @@
+---
+- hosts: hostList
+  vars_files:
+    - vars/cinder_info.yml
+  tasks:
+    - name: Add volume vip host
+      lineinfile: dest=/etc/hosts line="{{keepalived_vol_vip}} {{vol_vip_host}}" state=present
+      become: yes
+    - name: Make ceph dir
+      file: path=/etc/ceph state=directory mode=0755
+      become: yes
+    - name: Copy ceph conf
+      template: src=src/ceph-clients/ceph.conf dest=/etc/ceph/
+      become: yes
+
