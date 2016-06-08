@@ -1,12 +1,9 @@
-- hosts: hostList
-  vars_files:
-    - vars/cinder_info.yml
-    - vars/proxy_info.yml
+- hosts: apiList
   tasks:
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-cinderclient python-keystoneclient python-glanceclient python-metrics python-novaclient python-openstackclient
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics python-keystoneclient python-cinderclient python-oslo-middleware
     - name: Install cinder ec2
       shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
     - name: Stop Services cinder
@@ -18,6 +15,7 @@
         - cinder-backup
         - cinder-ec2-api
         - cinder-volume
+        - oslo-messaging-zmq-receiver
     - name: Start Services cinder
       service: name={{item}} state=started
       become: yes
@@ -25,4 +23,5 @@
         - cinder-api
         - cinder-scheduler
         - cinder-ec2-api
+        - oslo-messaging-zmq-receiver
   serial: 1

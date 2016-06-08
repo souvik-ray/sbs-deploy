@@ -1,12 +1,13 @@
+---
 - hosts: hostList
+  serial: 1  # This ensures that the services are deployed in only one host at a time
   vars_files:
     - vars/cinder_info.yml
-    - vars/proxy_info.yml
   tasks:
     - name: apt update
       shell: sudo apt-get update
     - name: install all cinder packages
-      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-cinderclient python-keystoneclient python-glanceclient python-metrics python-novaclient python-openstackclient
+      shell: sudo apt-get install -y --force-yes cinder-common python-cinder cinder-api cinder-scheduler cinder-volume cinder-backup python-metrics
     - name: Install cinder ec2
       shell: sudo apt-get install -y --force-yes python-cinder-ec2-api
     - name: Stop Services cinder
@@ -18,7 +19,8 @@
         - cinder-backup
         - cinder-ec2-api
         - cinder-volume
-    - name: Start Services cinder
+        - oslo-messaging-zmq-receiver
+    - name: Start Services cinder api, scheduler, ec2-api, backup
       service: name={{item}} state=started
       become: yes
       with_items:
@@ -26,8 +28,4 @@
         - cinder-scheduler
         - cinder-ec2-api
         - cinder-backup
-    - name: Start Services cinder
-      service: name=cinder-volume state=started
-      become: yes
-      run_once: yes
-  serial: 1
+        - oslo-messaging-zmq-receiver
